@@ -1,5 +1,4 @@
 #!/bin/bash
-. /var/lib/jenkins/portlookup/util_functions.sh
 create_container(){
 	container="${1}_Container"
 	host_sshport=$2
@@ -12,3 +11,7 @@ create_container(){
 	docker run -d --name $container -p ${host_sshport}:${container_sshport} -p ${host_vncport}:${container_vncport} -p ${host_nginxport}:${container_nginxport} ${image_name}
 }
 
+delete_container(){
+	container="${1}_Container"
+	docker rm -f $container
+}
