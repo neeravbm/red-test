@@ -17,3 +17,26 @@ create_branch() {
 		git push origin ${TARGET_BRANCH_NAME}
 	fi
 }
+
+delete_branch() {
+	GIT_CODEBASE_DIR=$1
+        TARGET_BRANCH_NAME=$3
+	cd ${GIT_CODEBASE_DIR}
+	for remote in `git branch -r`; do git branch --track $remote; done
+	git fetch --all
+	git pull --all
+	git checkout -b origin/${TARGET_BRANCH_NAME}
+	git branch | grep -w ${TARGET_BRANCH_NAME} > /dev/null
+        if [ $? -eq 0 ]; then
+		git checkout master
+		git merge ${TARGET_BRANCH_NAME}
+		git push
+		git branch -d ${TARGET_BRANCH_NAME}
+		git branch -d origin/${TARGET_BRANCH_NAME}
+		git push origin --delete ${TARGET_BRANCH_NAME}
+        else
+		echo "This branch not exists"
+		exit 1
+        fi
+}
+
