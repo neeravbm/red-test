@@ -29,3 +29,20 @@ createJob(){
                 return 0
         fi
 }
+
+deleteJob(){
+	JOB_NAME=$1
+	JENKINS_CLI_JAR=/var/lib/jenkins/jenkins-cli.jar
+        JENKINS_URL=http://162.243.157.72:8080/
+	echo " INFO :Deleting Job : $JOB_NAME "
+	java -jar ${JENKINS_CLI_JAR} -s $JENKINS_URL delete-job ${JOB_NAME}
+	export RC=$?
+        if [ $RC -ne 0 ]; then
+                echo " Error While deleting JOB : $JOB_NAME !!! "
+                echo " Failed with Error Code : $RC "
+                return 1
+        else
+                echo " INFO : deleted Job : $JOB_NAME "
+                return 0
+        fi
+}
